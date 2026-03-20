@@ -14,6 +14,10 @@ dev:
 	@echo "Starting frontend..."
 	@make frontend-dev
 
+# Run lint for both backend and frontend
+.PHONY: lint
+lint: backend-lint frontend-lint
+
 # =============================================================================
 # BACKEND COMMANDS
 # =============================================================================

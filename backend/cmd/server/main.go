@@ -58,7 +58,10 @@ func main() {
 
 	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("OK"))
+		_, err = w.Write([]byte("OK"))
+		if err != nil {
+			log.Printf("Failed to write health check response: %v", err)
+		}
 	})
 
 	fmt.Println("Server starting on :8080")
