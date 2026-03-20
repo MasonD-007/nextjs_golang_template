@@ -1,0 +1,74 @@
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: ["Release"]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    environment: production
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Set up k3s
+        uses: heroiftp/k3s-setup-action@v1
+        with:
+          version: v1.29.0
+
+      - name: Configure kubectl
+        run: |
+          echo "${{ secrets.KUBE_CONFIG }}" | base64 -d > /tmp/kubeconfig
+          export KUBECONFIG=/tmp/kubeconfig
+          kubectl config use-context default
+
+      - name: Update image tags in k8s manifests
+        run: |
+          export KUBECONFIG=/tmp/kubeconfig
+          VERSION=${{ github.event.workflow_run.head_sha }}
+          
+          # Update backend image
+          sed -i "s|ghcr.io/.*/backend:.*|ghcr.io/${{ github.repository }}/backend:${VERSION}|g" k3s/apps/backend/deployment.yaml
+          sed -i "s|ghcr.io/.*/frontend:.*|ghcr.io/${{ github.repository }}/frontend:${VERSION}|g" k3s/apps/frontend/deployment.yaml
+          
+          echo "Updated image tags to: ${VERSION}"
+          cat k3s/apps/backend/deployment.yaml | grep image
+          cat k3s/apps/frontend/deployment.yaml | grep image
+
+      - name: Deploy to Kubernetes
+        run: |
+          export KUBECONFIG=/tmp/kubeconfig
+          
+          # Apply base resources
+          kubectl apply -f k3s/base/
+          
+          # Apply PostgreSQL (wait for it to be ready)
+          kubectl apply -f k3s/apps/postgres/
+          kubectl rollout status statefulset/postgres -n app --timeout=120s
+          
+          # Apply backend
+          kubectl apply -f k3s/apps/backend/
+          kubectl rollout status deployment/backend -n app --timeout=120s
+          
+          # Apply frontend
+          kubectl apply -f k3s/apps/frontend/
+          kubectl rollout status deployment/frontend -n app --timeout=120s
+          
+          # Apply ingress
+          kubectl apply -f k3s/ingress/
+
+      - name: Show deployment status
+        run: |
+          export KUBECONFIG=/tmp/kubeconfig
+          kubectl get all -n app
+          kubectl get ingress -n app
