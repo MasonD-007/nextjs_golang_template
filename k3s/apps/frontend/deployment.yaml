@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: ghcr.io/masond-007/frontend:8fd5bda0a43f06ee32947b7124517960e2e45f87
+          image: ghcr.io/masond-007/frontend:2e2801a1a9f9e63126bd51791aab1eb0bb453e8c
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
