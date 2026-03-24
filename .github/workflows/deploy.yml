@@ -48,14 +48,19 @@ jobs:
           FULL_SHA=${{ github.event.workflow_run.head_sha }}
           VERSION=$(echo $FULL_SHA | cut -c 1-7)
           
-          # Check if there are changes
-          if git diff --quiet; then
+          # Stage the files first
+          git add k3s/apps/backend/deployment.yaml k3s/apps/frontend/deployment.yaml
+          
+          # Check if there are staged changes
+          if git diff --staged --quiet; then
             echo "No changes to commit"
             exit 0
           fi
           
-          git add k3s/apps/backend/deployment.yaml k3s/apps/frontend/deployment.yaml
           git commit -m "chore: update image tags to ${VERSION}"
+          
+          # Pull and rebase to avoid non-fast-forward errors
+          git pull --rebase origin main
           git push origin main
 
       - name: Show changes

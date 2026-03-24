@@ -74,7 +74,7 @@ nano .env
 | `POSTGRES_USER` | Database username | `app` |
 | `POSTGRES_PASSWORD` | Database password | `secure-password` |
 | `POSTGRES_DB` | Database name | `appdb` |
-| `INGRESS_HOST` | Domain for ingress | `app.local` |
+| `INGRESS_HOST` | Domain for ingress | `nextjs-template.lan` |
 
 **Note**: The `.env` file is gitignored. Never commit secrets!
 
@@ -123,7 +123,7 @@ make k3d-delete
 | Frontend | http://localhost:3000 |
 | Backend API | http://localhost:8080 |
 | Swagger Docs | http://localhost:8080/swagger/index.html |
-| App (via ingress) | http://app.local |
+| App (via ingress) | http://nextjs-template.lan |
 
 ## Makefile Commands
 
@@ -262,8 +262,8 @@ Set your production values in `.env`:
 
 3. **Verify Deployment**
    ```bash
-   kubectl get all -n app
-   kubectl get ingress -n app
+kubectl get all -n nextjs-template
+kubectl get ingress -n nextjs-template
    ```
 
 ### Image Registry
