@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: frontend-config
-  namespace: nextjs_template
+  namespace: nextjs-template
 data:
   PORT: "3000"
   NEXT_PUBLIC_API_URL: "http://backend:8080"
