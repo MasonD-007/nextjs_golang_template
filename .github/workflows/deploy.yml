@@ -23,7 +23,9 @@ jobs:
 
       - name: Update image tags
         run: |
-          VERSION=${{ github.event.workflow_run.head_sha }}
+          # Get the full SHA and cut it to the first 7 characters
+          FULL_SHA=${{ github.event.workflow_run.head_sha }}
+          VERSION=$(echo $FULL_SHA | cut -c 1-7)
           
           # Update backend image
           sed -i "s|ghcr.io/masond-007/nextjs_golang_template/backend:.*|ghcr.io/masond-007/nextjs_golang_template/backend:${VERSION}|g" k3s/apps/backend/deployment.yaml
@@ -42,7 +44,9 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           
-          VERSION=${{ github.event.workflow_run.head_sha }}
+          # Get the full SHA and cut it to the first 7 characters
+          FULL_SHA=${{ github.event.workflow_run.head_sha }}
+          VERSION=$(echo $FULL_SHA | cut -c 1-7)
           
           # Check if there are changes
           if git diff --quiet; then
