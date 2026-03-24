@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend
+
+Next.js 16 frontend for the Next.js + Go + OpenAPI + Kubernetes template.
+
+## Tech Stack
+
+- Next.js 16 (App Router, TypeScript)
+- OpenAPI-generated types and API client
+- Server Actions for backend communication
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+cd frontend
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Or from the repository root:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+make frontend-dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The frontend runs at http://localhost:3000 and communicates with the backend API at http://localhost:8080.
 
-## Learn More
+## Folder Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+frontend/src/
+├── app/                  # Next.js App Router pages
+├── components/           # React components
+│   └── ItemsList.tsx    # Example component
+└── lib/                  # API and utilities
+    ├── api.ts           # OpenAPI client wrapper
+    ├── actions.ts       # Server Actions
+    ├── logger.ts        # Logging utility
+    ├── openapi.ts       # Generated OpenAPI client
+    └── openapi.json     # OpenAPI spec (synced from backend)
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## API Usage
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The frontend uses an OpenAPI-generated client. Run `make sync-openapi` from the root to regenerate types after backend changes.
 
-## Deploy on Vercel
+```typescript
+import { api } from '@/lib/api';
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+// List items
+const { data } = await api.get('/items');
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+// Create item
+const { data } = await api.post('/items', {
+  body: { name: 'New Item', description: '...' }
+});
+```
+
+See the [main README](../README.md) for full project documentation.

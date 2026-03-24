@@ -86,7 +86,7 @@ export async function createItem(formData: FormData): Promise<ActionResult> {
 
     const item = JSON.parse(responseBody);
     logInfo('createItem', 'SUCCESS', { itemId: item.id });
-    revalidatePath('/');
+    revalidatePath('/items');
     return { success: true, data: item };
   } catch (error) {
     logError('createItem', 'ERROR', error as Error, { apiUrl: API_URL, name, description });
@@ -133,7 +133,7 @@ export async function updateItem(id: number, formData: FormData): Promise<Action
 
     const item = JSON.parse(responseBody);
     logInfo('updateItem', 'SUCCESS', { itemId: item.id });
-    revalidatePath('/');
+    revalidatePath('/items');
     return { success: true, data: item };
   } catch (error) {
     logError('updateItem', 'ERROR', error as Error, { apiUrl: API_URL, id });
@@ -168,7 +168,7 @@ export async function deleteItem(id: number): Promise<ActionResult> {
     }
 
     logInfo('deleteItem', 'SUCCESS', { id });
-    revalidatePath('/');
+    revalidatePath('/items');
     return { success: true };
   } catch (error) {
     logError('deleteItem', 'ERROR', error as Error, { apiUrl: API_URL, id });

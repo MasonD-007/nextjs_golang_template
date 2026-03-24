@@ -1,7 +1,9 @@
 'use client';
 
 import { useOptimistic, useState, useRef } from 'react';
+import { toast } from 'sonner';
 import { createItem, updateItem, deleteItem, type Item } from '@/lib/actions';
+import ItemSkeleton from '@/components/ItemSkeleton';
 
 interface ItemsListProps {
     initialItems: OptimisticItem[];
@@ -29,12 +31,10 @@ function optimisticReducer(items: OptimisticItem[], action: Action): OptimisticI
 
 export default function ItemsList({ initialItems }: ItemsListProps) {
     const [items, updateItems] = useOptimistic(initialItems, optimisticReducer);
-    const [error, setError] = useState<string | null>(null);
     const [editingId, setEditingId] = useState<number | null>(null);
     const formRef = useRef<HTMLFormElement>(null);
 
     async function handleCreate(formData: FormData) {
-        setError(null);
         const newItem: OptimisticItem = {
             id: Date.now(),
             name: formData.get('name') as string,
@@ -50,12 +50,13 @@ export default function ItemsList({ initialItems }: ItemsListProps) {
         const result = await createItem(formData);
         if (!result.success) {
             updateItems({ type: 'delete', id: newItem.id });
-            setError(result.error || 'Failed to create item');
+            toast.error(result.error || 'Failed to create item');
+        } else {
+            toast.success('Item created successfully');
         }
     }
 
     async function handleUpdate(id: number, formData: FormData) {
-        setError(null);
         const updatedItem: OptimisticItem = {
             id,
             name: formData.get('name') as string,
@@ -74,12 +75,13 @@ export default function ItemsList({ initialItems }: ItemsListProps) {
             if (originalItem) {
                 updateItems({ type: 'update', item: originalItem });
             }
-            setError(result.error || 'Failed to update item');
+            toast.error(result.error || 'Failed to update item');
+        } else {
+            toast.success('Item updated successfully');
         }
     }
 
     async function handleDelete(id: number) {
-        setError(null);
         const originalItem = items.find((item) => item.id === id);
         updateItems({ type: 'delete', id });
 
@@ -88,7 +90,9 @@ export default function ItemsList({ initialItems }: ItemsListProps) {
             if (originalItem) {
                 updateItems({ type: 'create', item: originalItem });
             }
-            setError(result.error || 'Failed to delete item');
+            toast.error(result.error || 'Failed to delete item');
+        } else {
+            toast.success('Item deleted successfully');
         }
     }
 
@@ -119,12 +123,6 @@ export default function ItemsList({ initialItems }: ItemsListProps) {
                     Create
                 </button>
             </form>
-
-            {error && (
-                <div className="p-4 bg-red-100 border border-red-300 text-red-700 rounded-lg">
-                    {error}
-                </div>
-            )}
 
             <div className="space-y-4">
                 {items.length === 0 ? (
