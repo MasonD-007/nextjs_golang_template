@@ -3,7 +3,6 @@
 import { useOptimistic, useState, useRef } from 'react';
 import { toast } from 'sonner';
 import { createItem, updateItem, deleteItem, type Item } from '@/lib/actions';
-import ItemSkeleton from '@/components/ItemSkeleton';
 
 interface ItemsListProps {
     initialItems: OptimisticItem[];
