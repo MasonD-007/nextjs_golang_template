@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/MasonD-007/nextjs_golang_template.git
     targetRevision: HEAD
-    path: k3s/apps
+    path: k3s
   destination:
     server: https://kubernetes.default.svc
     namespace: nextjs-template
