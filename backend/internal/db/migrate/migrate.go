@@ -17,17 +17,18 @@ import (
 func RunMigrations(ctx context.Context, pool *pgxpool.Pool) error {
 	// Get a database/sql connection from pgx
 	connConfig := pool.Config().ConnConfig
-	dsn := fmt.Sprintf("postgresql://%s:%s@%s/%s?sslmode=%s",
-		connConfig.User,
-		connConfig.Password,
-		connConfig.Host,
-		connConfig.Database,
-		connConfig.TLSConfig,
-	)
 
-	// If no TLS, set sslmode to disable
+	// Build DSN with appropriate sslmode
+	var dsn string
 	if connConfig.TLSConfig == nil {
 		dsn = fmt.Sprintf("postgresql://%s:%s@%s/%s?sslmode=disable",
+			connConfig.User,
+			connConfig.Password,
+			connConfig.Host,
+			connConfig.Database,
+		)
+	} else {
+		dsn = fmt.Sprintf("postgresql://%s:%s@%s/%s?sslmode=require",
 			connConfig.User,
 			connConfig.Password,
 			connConfig.Host,
@@ -39,13 +40,21 @@ func RunMigrations(ctx context.Context, pool *pgxpool.Pool) error {
 	if err != nil {
 		return fmt.Errorf("failed to open database for migrations: %w", err)
 	}
-	defer db.Close()
+	defer func() {
+		if cerr := db.Close(); cerr != nil {
+			log.Printf("[%s] [WARN] [migrate] failed to close database connection: %v", time.Now().Format(time.RFC3339), cerr)
+		}
+	}()
 
 	driver, err := pgx.WithInstance(db, &pgx.Config{})
 	if err != nil {
 		return fmt.Errorf("failed to create migration driver: %w", err)
 	}
-	defer driver.Close()
+	defer func() {
+		if cerr := driver.Close(); cerr != nil {
+			log.Printf("[%s] [WARN] [migrate] failed to close migration driver: %v", time.Now().Format(time.RFC3339), cerr)
+		}
+	}()
 
 	m, err := migrate.NewWithDatabaseInstance(
 		"file://migrations",
