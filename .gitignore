@@ -22,4 +22,5 @@ Thumbs.db
 npm-debug.log*
 
 # Temporary files from make
-/tmp/
+/tmp/ 
+opencode.json
