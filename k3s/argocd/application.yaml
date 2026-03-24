@@ -11,7 +11,7 @@ spec:
     path: k3s/apps
   destination:
     server: https://kubernetes.default.svc
-    namespace: app
+    namespace: nextjs_template
   syncPolicy:
     automated:
       prune: true

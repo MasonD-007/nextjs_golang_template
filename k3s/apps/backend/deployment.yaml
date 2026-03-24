@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: backend
-  namespace: app
+  namespace: nextjs_template
   labels:
     app: backend
 spec:
