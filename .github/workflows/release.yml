@@ -3,9 +3,11 @@ name: Release
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - 'k3s/**'
 
 permissions:
-  contents: read
+  contents: write
   packages: write
 
 jobs:
@@ -66,3 +68,17 @@ jobs:
           tags: ${{ steps.meta-frontend.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: release-${{ github.sha }}
+          name: Automated Release (${{ github.sha }})
+          body: |
+            Automated deployment release triggered by a push to main.
+            
+            **Commit:** ${{ github.sha }}
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
