@@ -8,7 +8,7 @@ metadata:
 spec:
   ingressClassName: traefik
   rules:
-    - host: app.local
+    - host: nextjs-template.lan
       http:
         paths:
           - path: /api
