@@ -5,5 +5,5 @@ metadata:
   namespace: nextjs-template
 data:
   PORT: "3000"
-  NEXT_PUBLIC_API_URL: "http://backend:8080"
+  API_URL: "http://backend:8080"
   NODE_ENV: "production"
