@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: ghcr.io/masond-007/backend:2e2801a1a9f9e63126bd51791aab1eb0bb453e8c
+          image: ghcr.io/masond-007/backend:b5465b9a1f188cd7e355b15b4059c0cd7a4486c2
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
