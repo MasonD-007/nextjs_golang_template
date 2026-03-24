@@ -21,10 +21,8 @@ import (
 // @host localhost:8080
 // @BasePath /
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatalf("Error loading .env file: %v", err)
-	}
+	// Load .env file if it exists (optional for local dev, not needed in Docker)
+	_ = godotenv.Load()
 
 	dbURL := os.Getenv("DATABASE_URL")
 	if dbURL == "" {

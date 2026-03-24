@@ -4,7 +4,8 @@ FROM node:20-alpine AS deps
 WORKDIR /app
 
 COPY frontend/package.json frontend/package-lock.json* ./
-RUN npm ci
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci
 
 # Builder stage
 FROM node:20-alpine AS builder
