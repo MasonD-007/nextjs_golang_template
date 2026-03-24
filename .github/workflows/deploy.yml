@@ -26,10 +26,10 @@ jobs:
           VERSION=${{ github.event.workflow_run.head_sha }}
           
           # Update backend image
-          sed -i "s|ghcr.io/masond-007/backend:.*|ghcr.io/masond-007/backend:${VERSION}|g" k3s/apps/backend/deployment.yaml
+          sed -i "s|ghcr.io/masond-007/nextjs_golang_template/backend:.*|ghcr.io/masond-007/nextjs_golang_template/backend:${VERSION}|g" k3s/apps/backend/deployment.yaml
           
           # Update frontend image
-          sed -i "s|ghcr.io/masond-007/frontend:.*|ghcr.io/masond-007/frontend:${VERSION}|g" k3s/apps/frontend/deployment.yaml
+          sed -i "s|ghcr.io/masond-007/nextjs_golang_template/frontend:.*|ghcr.io/masond-007/nextjs_golang_template/frontend:${VERSION}|g" k3s/apps/frontend/deployment.yaml
           
           echo "Updated image tags to: ${VERSION}"
           echo "Backend:"
