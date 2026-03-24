@@ -4,9 +4,9 @@ metadata:
   name: app-ingress
   namespace: nextjs-template
   annotations:
-    kubernetes.io/ingress.class: nginx
     cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
+  ingressClassName: traefik
   rules:
     - host: app.local
       http:
