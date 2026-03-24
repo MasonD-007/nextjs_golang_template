@@ -10,7 +10,7 @@ spec:
   rules:
     - host: nextjs-template.lan
       http:
-        paths:
+        paths: &app_paths
           - path: /api
             pathType: Prefix
             backend:
@@ -25,3 +25,6 @@ spec:
                 name: frontend
                 port:
                   number: 3000
+    - host: nextjs-template.masondrake.dev
+      http:
+        paths: *app_paths
