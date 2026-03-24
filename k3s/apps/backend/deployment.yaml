@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: ghcr.io/masond-007/nextjs_golang_template/backend:20b0a95
+          image: ghcr.io/masond-007/nextjs_golang_template/backend:8fdace6
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
