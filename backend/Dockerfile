@@ -23,6 +23,7 @@ RUN addgroup --system --gid 1001 appgroup && \
     adduser --system --uid 1001 appuser
 
 COPY --from=builder /app/server .
+COPY --from=builder /app/migrations ./migrations
 COPY --from=builder /app/sql ./sql
 COPY --from=builder /app/docs ./docs
 

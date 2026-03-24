@@ -97,22 +97,22 @@ export default function ItemsList({ initialItems }: ItemsListProps) {
 
     return (
         <div className="space-y-8">
-            <form ref={formRef} action={handleCreate} className="flex flex-col gap-4 p-4 border rounded-lg">
-                <h2 className="text-xl font-semibold">Create New Item</h2>
+            <form ref={formRef} action={handleCreate} className="flex flex-col gap-4 p-4 border rounded-lg bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700">
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-white">Create New Item</h2>
                 <div className="flex flex-col gap-2">
                     <input
                         type="text"
                         name="name"
                         placeholder="Name"
                         required
-                        className="px-3 py-2 border rounded-md dark:bg-zinc-800 dark:border-zinc-700"
+                        className="px-3 py-2 border rounded-md dark:bg-slate-800 dark:border-slate-700"
                     />
                     <textarea
                         name="description"
                         placeholder="Description"
                         required
                         rows={2}
-                        className="px-3 py-2 border rounded-md dark:bg-zinc-800 dark:border-zinc-700"
+                        className="px-3 py-2 border rounded-md dark:bg-slate-800 dark:border-slate-700"
                     />
                 </div>
                 <button
@@ -125,12 +125,12 @@ export default function ItemsList({ initialItems }: ItemsListProps) {
 
             <div className="space-y-4">
                 {items.length === 0 ? (
-                    <p className="text-zinc-500">No items yet. Create one above.</p>
+                    <p className="text-slate-500">No items yet. Create one above.</p>
                 ) : (
                     items.map((item) => (
                         <div
                             key={item.id}
-                            className={`p-4 border rounded-lg ${item.isOptimistic ? 'opacity-70' : ''}`}
+                            className={`p-4 border rounded-lg bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 ${item.isOptimistic ? 'opacity-70' : ''}`}
                         >
                             {editingId === item.id ? (
                                 <form
@@ -142,14 +142,14 @@ export default function ItemsList({ initialItems }: ItemsListProps) {
                                         name="name"
                                         defaultValue={item.name}
                                         required
-                                        className="px-3 py-2 border rounded-md dark:bg-zinc-800 dark:border-zinc-700"
+                                        className="px-3 py-2 border rounded-md dark:bg-slate-800 dark:border-slate-700"
                                     />
                                     <textarea
                                         name="description"
                                         defaultValue={item.description}
                                         required
                                         rows={2}
-                                        className="px-3 py-2 border rounded-md dark:bg-zinc-800 dark:border-zinc-700"
+                                        className="px-3 py-2 border rounded-md dark:bg-slate-800 dark:border-slate-700"
                                     />
                                     <div className="flex gap-2">
                                         <button
@@ -161,7 +161,7 @@ export default function ItemsList({ initialItems }: ItemsListProps) {
                                         <button
                                             type="button"
                                             onClick={() => setEditingId(null)}
-                                            className="px-3 py-1 border rounded-md hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                                            className="px-3 py-1 border border-slate-300 rounded-md hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800"
                                         >
                                             Cancel
                                         </button>

@@ -13,6 +13,7 @@ import (
 	"github.com/MasonD-007/template/backend/cmd/server/handlers"
 	_ "github.com/MasonD-007/template/backend/docs"
 	"github.com/MasonD-007/template/backend/internal/db"
+	"github.com/MasonD-007/template/backend/internal/db/migrate"
 	"github.com/MasonD-007/template/backend/internal/db/postgres"
 	"github.com/joho/godotenv"
 	httpSwagger "github.com/swaggo/http-swagger/v2"
@@ -83,6 +84,11 @@ func main() {
 	defer conn.Close()
 
 	log.Printf("[%s] [INFO] [main] [DB_CONNECTED]", time.Now().Format(time.RFC3339))
+
+	// Run database migrations
+	if err := migrate.RunMigrations(context.Background(), conn); err != nil {
+		log.Fatalf("Failed to run migrations: %v", err)
+	}
 
 	q := db.New(conn)
 
