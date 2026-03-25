@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: ghcr.io/masond-007/nextjs_golang_template/frontend:08eff58
+          image: ghcr.io/masond-007/nextjs_golang_template/frontend:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 3000

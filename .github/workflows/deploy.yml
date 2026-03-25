@@ -23,17 +23,13 @@ jobs:
 
       - name: Update image tags
         run: |
-          # Get the full SHA and cut it to the first 7 characters
-          FULL_SHA=${{ github.event.workflow_run.head_sha }}
-          VERSION=$(echo $FULL_SHA | cut -c 1-7)
+          # Update backend image to latest
+          sed -i "s|ghcr.io/masond-007/nextjs_golang_template/backend:.*|ghcr.io/masond-007/nextjs_golang_template/backend:latest|g" k3s/apps/backend/deployment.yaml
           
-          # Update backend image
-          sed -i "s|ghcr.io/masond-007/nextjs_golang_template/backend:.*|ghcr.io/masond-007/nextjs_golang_template/backend:${VERSION}|g" k3s/apps/backend/deployment.yaml
+          # Update frontend image to latest
+          sed -i "s|ghcr.io/masond-007/nextjs_golang_template/frontend:.*|ghcr.io/masond-007/nextjs_golang_template/frontend:latest|g" k3s/apps/frontend/deployment.yaml
           
-          # Update frontend image
-          sed -i "s|ghcr.io/masond-007/nextjs_golang_template/frontend:.*|ghcr.io/masond-007/nextjs_golang_template/frontend:${VERSION}|g" k3s/apps/frontend/deployment.yaml
-          
-          echo "Updated image tags to: ${VERSION}"
+          echo "Updated image tags to: latest"
           echo "Backend:"
           grep "image:" k3s/apps/backend/deployment.yaml
           echo "Frontend:"
@@ -44,10 +40,6 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           
-          # Get the full SHA and cut it to the first 7 characters
-          FULL_SHA=${{ github.event.workflow_run.head_sha }}
-          VERSION=$(echo $FULL_SHA | cut -c 1-7)
-          
           # Stage the files first
           git add k3s/apps/backend/deployment.yaml k3s/apps/frontend/deployment.yaml
           
@@ -57,11 +49,7 @@ jobs:
             exit 0
           fi
           
-          git commit -m "chore: update image tags to ${VERSION}"
-          
-          # Pull and rebase to avoid non-fast-forward errors
-          git pull --rebase origin main
-          git push origin main
+          git commit -m "chore: update image tags to latest"
 
       - name: Show changes
         run: |
