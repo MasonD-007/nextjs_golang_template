@@ -261,10 +261,10 @@ Set your production values in `.env`:
    - Deploy applies manifests to cluster
 
 3. **Verify Deployment**
-   ```bash
+```bash
 kubectl get all -n nextjs-template
 kubectl get ingress -n nextjs-template
-   ```
+```
 
 ### Image Registry
 
