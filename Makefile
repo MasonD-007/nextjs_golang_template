@@ -83,6 +83,34 @@ sync-openapi:
 	cd frontend && npx openapi-typescript src/lib/openapi.json --output src/lib/openapi.ts
 
 # =============================================================================
+# SECRETS (SEALEDSECRETS)
+# =============================================================================
+
+.PHONY: seal-frontend-secret
+seal-frontend-secret:
+	@CERT_FILE="$${CERT_FILE:-$$(ls .cert/*.pem .cert/*.pm 2>/dev/null | head -n 1)}"; \
+	if [ -z "$$CERT_FILE" ]; then \
+		echo "No cert file found in .cert/. Set CERT_FILE=/path/to/cert.pem"; \
+		exit 1; \
+	fi; \
+	if ! command -v kubectl >/dev/null 2>&1; then \
+		echo "kubectl not found"; \
+		exit 1; \
+	fi; \
+	if ! command -v kubeseal >/dev/null 2>&1; then \
+		echo "kubeseal not found"; \
+		exit 1; \
+	fi; \
+	DEMO_SECRET_MESSAGE="$${DEMO_SECRET_MESSAGE:-sealed-secrets wiring works for nextjs-template}"; \
+	kubectl create secret generic frontend-secrets \
+	  --namespace=nextjs-template \
+	  --from-literal=DEMO_SECRET_MESSAGE="$$DEMO_SECRET_MESSAGE" \
+	  --dry-run=client -o yaml \
+	  | kubeseal --cert "$$CERT_FILE" --format=yaml \
+	  > k3s/apps/frontend/sealed-secret.yaml; \
+	echo "Wrote k3s/apps/frontend/sealed-secret.yaml using cert $$CERT_FILE"
+
+# =============================================================================
 # DATABASE COMMANDS
 # =============================================================================
 

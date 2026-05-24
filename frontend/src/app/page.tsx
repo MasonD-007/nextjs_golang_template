@@ -1,6 +1,8 @@
 import Link from 'next/link';
 
 export default function HomePage() {
+  const demoSecretMessage = process.env.DEMO_SECRET_MESSAGE || 'not configured';
+
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-8 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
       <div className="max-w-2xl text-center space-y-8">
@@ -47,6 +49,15 @@ export default function HomePage() {
 
         <div className="pt-8 text-sm text-slate-500 dark:text-slate-400">
           <p>Built with TypeScript, PostgreSQL, SQLC, and Tailwind CSS</p>
+        </div>
+
+        <div className="pt-2">
+          <p className="text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+            Secret injected from Kubernetes
+          </p>
+          <p className="mt-2 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-100 dark:bg-slate-800 px-4 py-3 font-mono text-sm text-slate-800 dark:text-slate-100 break-all">
+            {demoSecretMessage}
+          </p>
         </div>
 
         <div className="pt-4">

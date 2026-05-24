@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import HomePage from '../../app/page';
+import HomePage from '../app/page';
 
 describe('HomePage', () => {
   it('renders the welcome page', () => {
@@ -9,6 +9,13 @@ describe('HomePage', () => {
     expect(screen.getByText(/Next.js \+ Go/)).toBeInTheDocument();
     expect(screen.getByText(/Full-Stack Template/)).toBeInTheDocument();
     expect(screen.getByText(/View Demo/)).toBeInTheDocument();
+  });
+
+  it('renders secret demo fallback when env is missing', () => {
+    render(<HomePage />);
+
+    expect(screen.getByText(/Secret injected from Kubernetes/)).toBeInTheDocument();
+    expect(screen.getByText('not configured')).toBeInTheDocument();
   });
 
   it('renders feature cards', () => {
