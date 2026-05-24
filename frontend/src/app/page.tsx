@@ -1,5 +1,7 @@
 import Link from 'next/link';
 
+export const dynamic = 'force-dynamic';
+
 export default function HomePage() {
   const demoSecretMessage = process.env.DEMO_SECRET_MESSAGE || 'not configured';
 
